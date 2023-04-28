@@ -1,8 +1,8 @@
 <template>
   <figure class="post-item">
-    <h1 class="post-item-title">
-      {{ data.title }}
-    </h1>
+    <div class="post-item-title">
+      <h1>{{ data.title }}</h1>
+    </div>
     <v-img
       :src="data.urlToImage"
       height="320"
@@ -12,16 +12,24 @@
     <div class="post-item-caption">
       <h3 class="mb-3">More Info</h3>
       <p class="p">
-        {{ data.content }}
+        {{ data.description }}
       </p>
-      <a :href="data.url" target="_blank" tag="v-btn">
+      <router-link
+        :to="{
+          name: 'post-detail',
+          params: { id: convertTitleToId(data.title) },
+        }"
+        tag="v-btn"
+      >
         <v-btn class="post-item-btn">More Info</v-btn>
-      </a>
+      </router-link>
     </div>
   </figure>
 </template>
 
 <script>
+import { convertTitleToId } from "@/services/helpers";
+
 export default {
   name: "post-item",
   props: {
@@ -35,6 +43,10 @@ export default {
       publishedAt: String,
       content: String,
     },
+  },
+
+  methods: {
+    convertTitleToId,
   },
 };
 </script>
@@ -57,22 +69,28 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    height: 102px;
-    overflow: hidden;
-    padding: 1rem 0.5rem;
-    line-height: 1;
-    font-size: 1.75rem;
-    text-shadow: 2px 2px 6px rgba(100, 100, 100, 0.95);
+    padding: 1rem 0.75rem 1.5rem;
     z-index: 2;
+    background: linear-gradient(
+      180deg,
+      rgb(1, 1, 53) 20%,
+      rgba(1, 1, 53, 0) 100%
+    );
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    h1 {
+      line-height: 1.2;
+      font-size: 1.5rem;
+      height: 90px;
+      overflow: hidden;
+    }
   }
   .post-item-caption {
     position: absolute;
-    bottom: -47%;
+    bottom: -46.5%;
     left: 0;
     width: 100%;
     padding: 1rem;
-    background-color: rgba(100, 100, 100, 0.95);
+    background-color: rgba(1, 1, 53, 0.85);
     color: white;
     font-size: 1rem;
     font-weight: 400;
@@ -80,24 +98,24 @@ export default {
     transition: 0.25s;
     z-index: 3;
     .p {
-      max-height: 81px;
+      height: 81px;
       overflow: hidden;
     }
   }
   .post-item-btn {
     margin-top: 1rem;
-    background: #6200ee;
-    color: #ffffff;
+    color: #6200ee;
+    background: #ffffff;
     font-size: 0.75rem;
   }
 
   &:hover {
     .post-item-bg {
-      transform: scale(1.25);
+      transform: scale(1.15);
     }
     .post-item-title {
       opacity: 0;
-      transform: scale(0.7);
+      top: -100%;
     }
     .post-item-caption {
       bottom: 0;
